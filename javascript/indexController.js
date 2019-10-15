@@ -1,11 +1,19 @@
 function IndexController() {
+  this.locationCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTAFOpil_7wi0vIL3bki50rWRHbAJQ3pE7q_dbqDsXOz8OGX0O-HpErZJls7LTJaMzs4MAbvBwBf81s/pub?gid=905377423&single=true&output=csv";
   this.populateTable();
 }
 
 IndexController.prototype.populateTable = function() {
-  var data = [];
-  var body = this.buildTableBody(data);
-  document.querySelectorAll('#location-list tbody')[0].outerHTML = body;
+  var _this = this;
+  Papa.parse(this.locationCSV, {
+    header: true,
+    download: true,
+    complete: function(results) {
+      console.log(results);
+      var body = _this.buildTableBody(results.data);
+      document.querySelectorAll('#location-list tbody')[0].outerHTML = body;
+    }
+  });
 };
 
 IndexController.prototype.buildTableBody = function(data) {

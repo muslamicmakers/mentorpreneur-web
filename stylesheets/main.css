@@ -1,3 +1,7 @@
 body {
   margin: 0;
 }
+
+.govuk-width-container {
+  max-width: 1200px;
+}

@@ -6,13 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Cross Government multi faith rooms</title>
 
-  <link rel="stylesheet" href="stylesheets/main.css">
   <!--[if !IE 8]><!-->
     <link rel="stylesheet" href="stylesheets/govuk-frontend-3.3.0.min.css">
   <!--<![endif]-->
   <!--[if IE 8]>
     <link rel="stylesheet" href="stylesheets/govuk-frontend-ie8-3.3.0.min.css">
   <![endif]-->
+  <link rel="stylesheet" href="stylesheets/main.css">
 </head>
 <body>
   <!-- HEADER -->
@@ -41,12 +41,29 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
           <h1 class="govuk-heading-xl">Cross government multi faith rooms</h1>
-          <p class="govuk-body">A list of multi faith rooms in Government.</p>
-          <p class="govuk-body">The list is maintained by the community so please add to it if you feel there is anything missing.</p>
-
+        </div>
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <p class="govuk-body-l">
+            A list of multi faith rooms in Government. 
+            The list is maintained by the community so please add to it if you feel there is anything missing.
+          </p>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <a href="https://forms.gle/Mk7py19nudkQYmMw8" target="_blank" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button" rel="noopener noreferrer">
+            Add a room
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
+              <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="govuk-grid-row govuk-!-margin-top-9">
+        <div class="govuk-grid-column-full">
           <!-- LIST -->
           <table class="govuk-table" id="location-list">
-              <caption class="govuk-table__caption">Locations</caption>
+              <caption class="govuk-table__caption">Locations of multi faith rooms</caption>
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th scope="col" class="govuk-table__header">Date added</th>
@@ -72,6 +89,7 @@
   </div>
   <!-- MAIN CONTENT END -->
 
+  <script src="javascript/papaparse.min.js"></script>
   <script src="javascript/govuk-frontend-3.3.0.min.js"></script>
   <script src="javascript/indexController.js"></script>
   <script>window.GOVUKFrontend.initAll()</script>
