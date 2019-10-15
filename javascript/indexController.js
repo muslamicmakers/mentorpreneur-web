@@ -30,40 +30,25 @@ IndexController.prototype.buildTableBody = function(data) {
         body += data[i]['Organisation name(s)'];
       body += '</td>';
 
-      /* ADDRESS LINE 1 */
+      /* ADDRESS */
       body += '<td class="govuk-table__cell">';
-        body += data[i]['Address line 1'];
-      body += '</td>';
-
-      /* ADDRESS LINE 2 */
-      body += '<td class="govuk-table__cell">';
-        body += data[i]['Address line 2'];
-      body += '</td>';
-
-      /* TOWN / CITY */
-      body += '<td class="govuk-table__cell">';
-        body += data[i]['Town / City'];
-      body += '</td>';
-
-      /* County */
-      body += '<td class="govuk-table__cell">';
-        body += data[i]['County'];
-      body += '</td>';
-
-      /* Postcode */
-      body += '<td class="govuk-table__cell">';
-        body += data[i]['Postcode'];
-      body += '</td>';
-
-      /* Where is the multi faith room located in the building? (For example 6th floor, opposite meeting room 612) */
-      body += '<td class="govuk-table__cell">';
-        body += data[i]['Where is the multi faith room located in the building? (For example 6th floor, opposite meeting room 612)'];
-      body += '</td>';
-
-      /* Any notes or things to be aware of? */
-      body += '<td class="govuk-table__cell">';
-        body += data[i]['Any notes or things to be aware of?'];
-      body += '</td>';
+        body += '<strong>' + data[i]['Address line 1'] + '</strong><br/>';
+        if( data[i]['Address line 2'] ) body += data[i]['Address line 2'] + ', ';
+        if( data[i]['Town / City'] ) body += data[i]['Town / City'] + ', ';
+        if( data[i]['County'] ) body += data[i]['County'] + ', ';
+        body += '<br/>' + data[i]['Postcode'];
+        body += '<p class="govuk-body govuk-!-margin-top-5"><strong>Room location: </strong>' + data[i]['Where is the multi faith room located in the building? (For example 6th floor, opposite meeting room 612)'] + '</p>';
+        if( data[i]['Any notes or things to be aware of?'] )  body += '<p class="govuk-body"><strong>Notes: </strong>' + data[i]['Any notes or things to be aware of?'] + '</p>';
+        
+        // build the google maps query
+        body += '<p class="govuk-body govuk-!-margin-top-5"><a class="govuk-link" href="http://maps.google.com/?q='+ [
+          data[i]['Address line 1'],
+          data[i]['Address line 2'],
+          data[i]['Town / City'],
+          data[i]['County'],
+          data[i]['Postcode']
+        ].join(', ') +'" target="_blank">View on Google Maps</a></p>';
+      body += '</td>'
     body += '</tr>'
   }
   if (!data.length){
