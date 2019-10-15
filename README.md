@@ -1,4 +1,4 @@
-# cross-gov-multi-faith-rooms
+# Cross government multi faith rooms
 
 URL: https://xgov-rooms.netlify.com/
 
