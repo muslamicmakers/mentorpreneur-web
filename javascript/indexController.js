@@ -15,6 +15,7 @@ IndexController.prototype.populateTable = function() {
     complete: function(results) {
       var body = _this.buildTableBody(results.data);
       document.querySelectorAll('#location-list tbody')[0].outerHTML = body;
+      _this.initLinkTracking();
     }
   });
 };
@@ -74,6 +75,21 @@ IndexController.prototype.buildTableBody = function(data) {
 
   body += '</tbody>';
   return body;
+};
+
+IndexController.prototype.initLinkTracking = function() {
+  var links = document.getElementsByTagName("a");
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener(
+      'click',
+      function(event){
+        if (window._analytics) {
+          window._analytics.trackEvent("linkClicked", event.target.innerText, event.target.href);
+        }
+      },
+      false
+    );
+  }
 };
 
 /************************
