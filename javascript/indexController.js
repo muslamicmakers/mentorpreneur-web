@@ -30,7 +30,7 @@ IndexController.prototype.buildTableBody = function(data) {
     body += '<tr class="govuk-table__row">';
       /* LOCATION DETAILS */
       body += '<td class="govuk-table__cell">';
-        body += '<a href="' + googleMapsURL + '"><h3 class="govuk-heading-s govuk-!-margin-top-3">' + data[i]['Organisation name(s)'] + '</h3></a>';
+        body += '<a href="' + googleMapsURL + '" target="_blank" class="govuk-link"><h3 class="govuk-heading-s govuk-!-margin-top-3">' + data[i]['Organisation name(s)'] + '</h3></a>';
         body +=  data[i]['Address line 1'] + '<br/>';
         if( data[i]['Address line 2'] ) body += data[i]['Address line 2'] + ', ';
         if( data[i]['Town / City'] ) body += data[i]['Town / City'] + ', ';
