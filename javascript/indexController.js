@@ -9,7 +9,6 @@ IndexController.prototype.populateTable = function() {
     header: true,
     download: true,
     complete: function(results) {
-      console.log(results);
       var body = _this.buildTableBody(results.data);
       document.querySelectorAll('#location-list tbody')[0].outerHTML = body;
     }
