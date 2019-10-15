@@ -4,6 +4,9 @@ function IndexController() {
   this.initTableSearch();
 }
 
+/************************
+ *    POPULATE LIST
+ ************************/
 IndexController.prototype.populateTable = function() {
   var _this = this;
   Papa.parse(this.locationCSV, {
@@ -16,6 +19,9 @@ IndexController.prototype.populateTable = function() {
   });
 };
 
+/*
+ * @todo: Use a templating engine rather than JS
+ */
 IndexController.prototype.buildTableBody = function(data) {
   var body = '<tbody class="govuk-table__body">';
   for(var i = 0; i < data.length; i++)
@@ -31,29 +37,48 @@ IndexController.prototype.buildTableBody = function(data) {
     body += '<tr class="govuk-table__row">';
       /* LOCATION DETAILS */
       body += '<td class="govuk-table__cell">';
+        // organisation name
         body += '<a href="' + googleMapsURL + '" target="_blank" class="govuk-link"><h3 class="govuk-heading-s govuk-!-margin-top-3">' + data[i]['Organisation name(s)'] + '</h3></a>';
+
+        // address
         body +=  data[i]['Address line 1'] + '<br/>';
         if( data[i]['Address line 2'] ) body += data[i]['Address line 2'] + ', ';
         if( data[i]['Town / City'] ) body += data[i]['Town / City'] + ', ';
         if( data[i]['County'] ) body += data[i]['County'] + ', ';
         body += '<br/>' + data[i]['Postcode'];
-        body += '<p class="govuk-body govuk-!-margin-top-5"><strong>Room location: </strong>' + data[i]['Where is the multi faith room located in the building? (For example 6th floor, opposite meeting room 612)'] + '</p>';
-        if( data[i]['Any notes or things to be aware of?'] )  body += '<p class="govuk-body"><strong>Notes: </strong>' + data[i]['Any notes or things to be aware of?'] + '</p>';
+
+        // room location
+        body += '<p class="govuk-body govuk-!-margin-top-5"><strong>Room location: </strong>'
+            + data[i]['Where is the multi faith room located in the building? (For example 6th floor, opposite meeting room 612)']
+          + '</p>';
+
+        // notes
+        if( data[i]['Any notes or things to be aware of?'] )
+          body += '<p class="govuk-body"><strong>Notes: </strong>' + data[i]['Any notes or things to be aware of?'] + '</p>';
+
+        // date added
         body += '<p class="govuk-body"><strong>Date added: </strong>' + data[i]['Timestamp'] + '</p>';
+
         // build the google maps query
         body += '<p class="govuk-body govuk-!-margin-top-5"><a class="govuk-link" href="'+ googleMapsURL +'" target="_blank">View on Google Maps</a></p>';
       body += '</td>'
     body += '</tr>'
   }
+
+  // when no results
   if (!data.length){
     body += '<tr class="govuk-table__row">';
       body += '<td class="govuk-table__cell" colspan="9">No data found</td>';
     body += '</tr>'
   }
+
   body += '</tbody>';
   return body;
 };
 
+/************************
+ *      SEARCH
+ ************************/
 IndexController.prototype.initTableSearch = function(){
   document
     .getElementById("table-search")
@@ -82,6 +107,9 @@ IndexController.prototype.tableSearch = function(){
   }
 };
 
+/************************
+ *      INIT
+ ************************/
 (function(){
   new IndexController();
 })();
