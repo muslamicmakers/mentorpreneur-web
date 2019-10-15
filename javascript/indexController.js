@@ -1,6 +1,7 @@
 function IndexController() {
   this.locationCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTAFOpil_7wi0vIL3bki50rWRHbAJQ3pE7q_dbqDsXOz8OGX0O-HpErZJls7LTJaMzs4MAbvBwBf81s/pub?gid=905377423&single=true&output=csv";
   this.populateTable();
+  this.initTableSearch();
 }
 
 IndexController.prototype.populateTable = function() {
@@ -51,6 +52,34 @@ IndexController.prototype.buildTableBody = function(data) {
   }
   body += '</tbody>';
   return body;
+};
+
+IndexController.prototype.initTableSearch = function(){
+  document
+    .getElementById("table-search")
+    .addEventListener(
+      'keyup',
+      this.tableSearch,
+      false
+    );
+};
+
+IndexController.prototype.tableSearch = function(){
+  var input = document.getElementById("table-search");
+  var filter = input.value.toUpperCase();
+  var table = document.getElementById("location-list");
+  var tr = table.getElementsByTagName("tr");
+  for (var i = 0; i < tr.length; i++) {
+    var td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      var txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
 };
 
 (function(){
