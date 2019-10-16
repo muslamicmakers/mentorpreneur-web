@@ -28,7 +28,7 @@ IndexController.prototype.buildTableBody = function(data) {
   for(var i = 0; i < data.length; i++)
   {
     var _data = data[i];
-    if (!_data["Timestamp"].length && _data['Approved'] !== "TRUE") {
+    if (!_data["Timestamp"].length || _data['Approved'] !== "TRUE") {
       continue;
     }
 
