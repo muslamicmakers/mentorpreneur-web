@@ -12,3 +12,7 @@ Built based on conversations on this twitter thread: https://twitter.com/ImHuYor
 | Database Spreadsheet (Editable - Need permissions) | https://docs.google.com/spreadsheets/d/1h--RjH3UhP3iS9mq158zxXM69EmpxgYdNtfF6hE3Fl4/edit |
 | Add new room | https://forms.gle/Mk7py19nudkQYmMw8 |
 | Request changes / give feedback / contact the team | https://forms.gle/CNaFewf6XCCVT3LX6 |
+
+## Architecture 
+<img src="https://raw.githubusercontent.com/DilwoarH/cross-gov-multi-faith-rooms/master/assets/images/XGOV-MF-ROOMS-Architecture.png" width="100%"/>
+
