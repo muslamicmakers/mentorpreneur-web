@@ -44,12 +44,12 @@ IndexController.prototype.buildTableBody = function(tableBody, rooms) {
       location:           room['Where is the multi faith room located in the building? (For example 6th floor, opposite meeting room 612)'],
       notes:              room['Any notes or things to be aware of?'],
       googleMapsURL:      'http://maps.google.com/?q='+ [
-                            room.addressLine1,
-                            room.addressLine2,
-                            room.city,
-                            room.county,
-                            room.postcode
-                          ].join(', ')
+                            room['Address line 1'],
+                            room['Address line 2'],
+                            room['Town / City'],
+                            room['County'],
+                            room['Postcode']
+                          ].join('+')
     };
   })
   .filter( Boolean )
