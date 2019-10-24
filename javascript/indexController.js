@@ -51,7 +51,9 @@ IndexController.prototype.buildTableBody = function(tableBody, rooms) {
                             room.postcode
                           ].join(', ')
     };
-  }).filter( Boolean );
+  })
+  .filter( Boolean )
+  .sort(function(a, b) { return (a.organisationName.toLowerCase() > b.organisationName.toLowerCase()) ? 1 : -1 });
 
   tableBody.innerHTML = nunjucks.render('table-rows.html', { rooms: rooms });
 };
