@@ -1,112 +1,204 @@
 function IndexController() {
-  this.locationCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTAFOpil_7wi0vIL3bki50rWRHbAJQ3pE7q_dbqDsXOz8OGX0O-HpErZJls7LTJaMzs4MAbvBwBf81s/pub?gid=905377423&single=true&output=csv";
-  this.populateTable();
-  this.initTableSearch();
-  nunjucks.configure('views', { autoescape: true });
+	this.locationCSV = "https://docs.google.com/spreadsheets/d/1FhG9DojL9VVpJ49GlX1Mwkf9wXcWx_Y_3W8zeYpWEEQ/export?format=csv";
+
+	this.populateTable();
+	this.initTableSearch();
+	nunjucks.configure('views', { autoescape: true });
 }
 
 /************************
  *    POPULATE LIST
  ************************/
-IndexController.prototype.populateTable = function() {
-  var _this = this;
-  Papa.parse(this.locationCSV, {
-    header: true,
-    download: true,
-    complete: function(results) {
-      _this.buildTableBody(
-        document.querySelectorAll('#location-list tbody')[0],
-        results.data
-      );
-      _this.initLinkTracking();
-    }
-  });
+IndexController.prototype.populateTable = function () {
+	var _this = this;
+	Papa.parse(this.locationCSV, {
+		header: true,
+		download: true,
+		complete: function (results) {
+			_this.buildTableBody(
+				document.querySelectorAll('#mentor-list')[0],
+				results.data
+			);
+			_this.initLinkTracking();
+		}
+	});
 };
 
 /*
  * @todo: Use a templating engine rather than JS
  */
-IndexController.prototype.buildTableBody = function(tableBody, rooms) {
-  rooms = rooms.map(function(room){
-    if (!room["Timestamp"] || !room["Timestamp"].length || room['Approved'] !== "TRUE") {
-      return null;
-    }
+IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 
-    // transformData
-    return {
-      createdAt:          room["Timestamp"],
-      organisationName:   room['Organisation name(s)'],
-      addressLine1:       room['Address line 1'],
-      addressLine2:       room['Address line 2'],
-      city:               room['Town / City'],
-      county:             room['County'],
-      postcode:           room['Postcode'],
-      location:           room['Where is the multi faith room located in the building? (For example 6th floor, opposite meeting room 612)'],
-      notes:              room['Any notes or things to be aware of?'],
-      googleMapsURL:      'http://maps.google.com/?q='+ [
-                            room['Address line 1'],
-                            room['Address line 2'],
-                            room['Town / City'],
-                            room['County'],
-                            room['Postcode']
-                          ].join('+')
-    };
-  })
-  .filter( Boolean )
-  .sort(function(a, b) { return (a.organisationName.toLowerCase() > b.organisationName.toLowerCase()) ? 1 : -1 });
+	mentors = mentors.map(mentor => {
 
-  tableBody.innerHTML = nunjucks.render('table-rows.html', { rooms: rooms });
+		if (!mentor["Timestamp"] || !mentor["Timestamp"].length) {
+		  return null;
+		}
+
+		return {
+			createdDate: mentor["Timestamp"],
+			name: mentor["Name"],
+			email: mentor["Email"],
+			linkedinUrl: mentor["Please provide a link to your professional profile (e.g. LinkedIn)"],
+			currentJob: mentor["Current job"],
+			bio: mentor["Tell us a little about yourself (Please give a longer description of at least 380 characters)"],
+			specialities: this._mapSpecialities(mentor["Please select all of your specialties"]),
+			specialitiesOther: mentor["If you have a specialty that wasn't listed please elaborate below."],
+			hasPreviouslyMentored: mentor["Have you ever been a mentor in a more formal setting?"],
+			preferredFormats: mentor["What format would you like to mentor your mentee?"].split(",")
+		}
+	})
+	.filter(Boolean)
+	.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+
+	console.log("mentors", mentors);
+
+	tableBody.innerHTML = nunjucks.render('all-cards.html', { mentors: mentors });
 };
 
-IndexController.prototype.initLinkTracking = function() {
-  var links = document.getElementsByTagName("a");
-  for (var i = 0; i < links.length; i++) {
-    links[i].addEventListener(
-      'click',
-      function(event){
-        if (window._analytics) {
-          window._analytics.trackEvent("linkClicked", event.target.innerText, event.target.href);
-        }
-      },
-      false
-    );
-  }
+IndexController.prototype.initLinkTracking = function () {
+	var links = document.getElementsByTagName("a");
+	for (var i = 0; i < links.length; i++) {
+		links[i].addEventListener(
+			'click',
+			function (event) {
+				if (window._analytics) {
+					window._analytics.trackEvent("linkClicked", event.target.innerText, event.target.href);
+				}
+			},
+			false
+		);
+	}
 };
 
 /************************
  *      SEARCH
  ************************/
-IndexController.prototype.initTableSearch = function(){
-  document
-    .getElementById("table-search")
-    .addEventListener(
-      'keyup',
-      this.tableSearch,
-      false
-    );
+IndexController.prototype.initTableSearch = function () {
+	document
+		.getElementById("table-search")
+		.addEventListener(
+			'keyup',
+			this.tableSearch,
+			false
+		);
 };
 
-IndexController.prototype.tableSearch = function(){
-  var input = document.getElementById("table-search");
-  var filter = input.value.toUpperCase();
-  var table = document.getElementById("location-list");
-  var tr = table.getElementsByTagName("tr");
-  for (var i = 0; i < tr.length; i++) {
-    var td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      var txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
+IndexController.prototype.tableSearch = function () {
+	var input = document.getElementById("table-search");
+	var filter = input.value.toUpperCase();
+	var table = document.getElementById("mentor-list");
+	var tr = table.getElementsByTagName("article");
+	for (var i = 0; i < tr.length; i++) {
+		var td = tr[i].querySelector("#mentor-name");
+		if (td) {
+			var txtValue = td.textContent || td.innerText;
+			if (txtValue.toUpperCase().indexOf(filter) > -1) {
+				tr[i].style.display = "";
+			} else {
+				tr[i].style.display = "none";
+			}
+		}
+	}
+};
+
+IndexController.prototype._mapSpecialities = function (string) {
+
+	if (!string) {
+		return [];
+	}
+
+	console.log(string);
+
+	let specialities = string.split(",").map(speciality => {
+		if (!speciality) {
+			return null;
+		}
+
+		speciality = speciality.toLowerCase();
+		
+		if (speciality.indexOf("technology & tooling") > -1) {
+			return { name: "Technology & Tooling", color: "orange" };
+		}
+
+		if (speciality.indexOf("marketing/ social/ pr/ content/ ads") > -1) {
+			return { name: "Marketing / Social / PR / Content / Ads", color: "orange" };
+		}
+
+		if (speciality.indexOf("growth") > -1) {
+			return { name: "Growth", color: "orange" };
+		}
+
+		if (speciality.indexOf("funding/ seeding") > -1) {
+			return { name: "Funding / Seeding", color: "orange" };
+		}
+
+		if (speciality.indexOf("customer experience & design") > -1) {
+			return { name: "Customer Experience & Design", color: "orange" };
+		}
+
+		if (speciality.indexOf("business model/strategy") > -1) {
+			return { name: "Business Model / Strategy", color: "orange" };
+		}
+
+		if (speciality.indexOf("data based technology") > -1) {
+			return { name: "Data Based Technology", color: "gold" };
+		}
+
+		if (speciality.indexOf("physical prototyping") > -1) {
+			return { name: "Physical Prototyping", color: "gold" };
+		}
+
+		if (speciality.indexOf("sales/ customer success/ leads/ pricing") > -1) {
+			return { name: "Sales / Customer Success / Leads / Pricing", color: "gold" };
+		}
+
+		if (speciality.indexOf("legal (all)/ employment/ hr") > -1) {
+			return { name: "Legal / Employment / HR", color: "gold" };
+		}
+
+		if (speciality.indexOf("finance/ book-keeping/ admin") > -1) {
+			return { name: "Finance / Book-keeping / Admin", color: "gold" };
+		}
+
+		if (speciality.indexOf("confidence/ presenting/ pitching") > -1) {
+			return { name: "Confidence / Pitching / Presenting", color: "gold" };
+		}
+
+		if (speciality.indexOf("soft skills/ management &team skills") > -1) {
+			return { name: "Soft Skills / Management & Team Skills", color: "gold" };
+		}
+
+		if (speciality.indexOf("cvs/ career strategy/ interviews") > -1) {
+			return { name: "CVs / Career Strategy / Interviews", color: "yellow" };
+		}
+
+		if (speciality.indexOf("branding/ design/ packaging") > -1) {
+			return { name: "Branding / Design / Packaging", color: "yellow" };
+		}
+
+		if (speciality.indexOf("community/ memberships") > -1) {
+			return { name: "Community / Memberships", color: "yellow" };
+		}
+
+		if (speciality.indexOf("film/ photography/ sound/ visual") > -1) {
+			return { name: "Film / Photography / Sound / Visual", color: "yellow" };
+		}
+
+		if (speciality.indexOf("policy/ campaigning/ ngos") > -1) {
+			return { name: "Policy / Campaigning / NGOs", color: "yellow" };
+		}
+
+		return null;
+	})
+	.filter(Boolean);
+	
+	return specialities;
 };
 
 /************************
  *      INIT
  ************************/
-(function(){
-  new IndexController();
+(function () {
+	new IndexController();
 })();

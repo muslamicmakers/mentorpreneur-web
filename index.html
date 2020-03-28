@@ -1,132 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Cross Government multi faith rooms</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Muslamic Makers Mentorpreneur</title>
 
-  <!--[if !IE 8]><!-->
-    <link rel="stylesheet" href="stylesheets/govuk-frontend-3.3.0.min.css">
-  <!--<![endif]-->
-  <!--[if IE 8]>
-    <link rel="stylesheet" href="stylesheets/govuk-frontend-ie8-3.3.0.min.css">
-  <![endif]-->
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="stylesheets/main.css">
+	<link rel="stylesheet" href="https://unpkg.com/tachyons@4.6.1/css/tachyons.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+	<link rel="stylesheet" href="stylesheets/main.css">
 </head>
+
 <body>
-  <!-- HEADER -->
-  <header class="govuk-header " role="banner" data-module="govuk-header">
-    <div class="govuk-header__container govuk-width-container">
-      <div class="govuk-header__logo">
-        <a href="#" class="govuk-header__link govuk-header__link--homepage">
-          <span class="govuk-header__logotype">
-            <span class="govuk-header__logotype-text">
-              X-GOV
-            </span>
-          </span>
-        </a>
-      </div>
-    </div>
-  </header>
-  <!-- HEADER END -->
+	<header>
+		<div class="bg-lightest-blue pv4 pv5-ns lh-copy ph3">
+			<div class="mw8 center">
+				<div class="tc ph3 ph0-ns"><a href="/" class="no-underline">
+						<p class="f5 f3-ns b navy mv0 lh-title ttu">Muslamic Makers</p>
+					</a>
+					<p class="f1 b mt1 center mb2" style="color: rgb(48, 175, 255);">Mentorpreneur</p>
+					<div class="social-icons"><a href="https://www.instagram.com/muslamicmakers"><i class="fa fa-instagram fa-2x navy dim" aria-hidden="true"></i></a><a href="https://twitter.com/muslamicmakers"><i class="fa fa-twitter-square fa-2x navy ph2 dim" aria-hidden="true"></i></a><a href="http://facebook.com/muslamicmakers"><i class="fa fa-facebook-square fa-2x navy pr2 dim" aria-hidden="true"></i></a><a href="https://github.com/muslamicmakers"><i class="fa fa-github fa-2x navy dim" aria-hidden="true"></i></a></div>
+				</div>
+			</div>
+		</div>
+	</header>
 
-  <!-- MAIN CONTENT -->
-  <div class="govuk-width-container">  
-    <main class="govuk-main-wrapper">
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-          <h1 class="govuk-heading-xl">Cross government multi faith rooms</h1>
-        </div>
-      </div>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <p class="govuk-body-l">
-            A list of multi faith rooms in Government. 
-            This list is maintained by the community so please add to it if you feel there is anything missing.
-          </p>
-          <p class="govuk-body">
-            <a class="govuk-link" href="https://forms.gle/CNaFewf6XCCVT3LX6" target="_blank" rel="noopener noreferrer">
-                Request changes / give feedback / contact the team
-            </a>
-          </p>
-          <p class="govuk-body">
-            <a class="govuk-link" href="https://github.com/DilwoarH/cross-gov-multi-faith-rooms" target="_blank" rel="noopener noreferrer">
-                Source code / Github
-            </a>
-          </p>
-        </div>
-        <div class="govuk-grid-column-one-third">
-          <a href="https://forms.gle/Mk7py19nudkQYmMw8" target="_blank" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button" rel="noopener noreferrer">
-            Add a room
-            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
-              <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
-            </svg>
-          </a>
-        </div>
-      </div>
-      <div class="govuk-grid-row govuk-!-margin-top-9">
-        <div class="govuk-grid-column-full">
-          <!-- LIST -->
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="table-search">
-              Search
-            </label>
-            <input class="govuk-input" id="table-search" name="table-search" type="text">
-          </div>
-          <table class="govuk-table" id="location-list">
-              <caption class="govuk-table__caption govuk-visually-hidden">Locations of multi faith rooms</caption>
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th scope="col" class="govuk-table__header">Locations of multi faith rooms</th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell" colspan="9">Loading data...</td>
-                </tr>
-              </tbody>
-            </table>
-        </div>
-      </div>
-    </main>
-  </div>
-  <!-- MAIN CONTENT END -->
+	<section class="mw8 center ph3-ns">
+		<div class="cf ph2-ns">
+			<div class="fl w-100 pa2">
 
-  <footer class="govuk-footer " role="contentinfo">
-    <div class="govuk-width-container ">
-      <div class="govuk-footer__navigation">
-        <div class="govuk-footer__section">
-          <h2 class="govuk-footer__heading govuk-heading-m">Support</h2>
-          <ul class="govuk-footer__list">
-            <li class="govuk-footer__list-item">
-              <a class="govuk-footer__link" href="https://github.com/DilwoarH/cross-gov-multi-faith-rooms" target="_blank" rel="noopener noreferrer">
-                View source code
-              </a>
-            </li>
-            <li class="govuk-footer__list-item">
-              <a class="govuk-footer__link" href="https://forms.gle/CNaFewf6XCCVT3LX6" target="_blank" rel="noopener noreferrer">
-                Request changes / give feedback / contact the team
-              </a>
-            </li>
-            <li class="govuk-footer__list-item">
-              <a class="govuk-footer__link" href="https://forms.gle/Mk7py19nudkQYmMw8" target="_blank" rel="noopener noreferrer">
-                Add a room
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
+				<form class="pa3 black-80">
+					<div>
+						<label for="table-search" class="f6 b db mb2">Search</span></label>
+						<input id="table-search" class="input-reset ba b--lightest-blue pa2 br3 mb2 db w-100" type="text" aria-describedby="table-search-desc">
+						<small id="table-search-desc" class="f6 black-60 db mb2">Enter a search term to filter results</small>
+					</div>
+				</form>
 
-  <script src="javascript/nunjucks.js"></script>
-  <script src="javascript/papaparse.min.js"></script>
-  <script src="javascript/govuk-frontend-3.3.0.min.js"></script>
-  <script src="javascript/AnalyticsController.js"></script>
-  <script src="javascript/indexController.js"></script>
-  <script>window.GOVUKFrontend.initAll()</script>
+
+			</div>
+		</div>
+	</section>
+
+	<section class="mw8 center ph3-ns">
+		<div class="cf ph2-ns">
+			<div class="fl w-100 pa2 flex flex-wrap" id="mentor-list">
+				Loading data...
+			</div>
+		</div>
+	</section>
+
+
+	<footer class="lh-copy bg-navy">
+		<div class="mw8 center silver flex-ns justify-between center tc tl-ns pv4 ph3">
+			<p class="ma0 white">© Copyright 2020, Muslamic Makers</p>
+			<div class="social-icons dib mt3 mt0-ns"><a href="https://www.instagram.com/muslamicmakers/"><i class="fa fa-instagram fa-2x lightest-blue dim" aria-hidden="true"></i></a><a href="https://twitter.com/muslamicmakers"><i class="fa fa-twitter-square fa-2x lightest-blue ph3 ph2-ns dim" aria-hidden="true"></i></a><a href="http://facebook.com/muslamicmakers"><i class="fa fa-facebook-square fa-2x lightest-blue pr3 pr2-ns dim" aria-hidden="true"></i></a><a href="https://github.com/muslamicmakers"><i class="fa fa-github fa-2x lightest-blue dim" aria-hidden="true"></i></a></div>
+		</div>
+	</footer>
+
+	<script src="javascript/nunjucks.js"></script>
+	<script src="javascript/papaparse.min.js"></script>
+	<script src="javascript/AnalyticsController.js"></script>
+	<script src="javascript/indexController.js"></script>
 
 </body>
+
 </html>

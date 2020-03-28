@@ -1,17 +1,17 @@
-# Cross government multi faith rooms
+# Muslamic Makers Mentorpreneur Programme
 
-<img src="https://raw.githubusercontent.com/DilwoarH/filestore/master/Screen%20Shot%202019-10-16%20at%2000.17.46.png" width="100%">
+*Screenshot pending*
 
-URL: https://xgov-rooms.netlify.com/
+URL: *pending*
 
-Built based on conversations on this twitter thread: https://twitter.com/ImHuYorks/status/1181167704058793984
+Built based on Dilwoar's work here: https://github.com/DilwoarH/cross-gov-multi-faith-rooms
 
 | Asset / Action | Link |
-|:-:|----------|
-| Database Spreadsheet (View only) | https://docs.google.com/spreadsheets/d/e/2PACX-1vTAFOpil_7wi0vIL3bki50rWRHbAJQ3pE7q_dbqDsXOz8OGX0O-HpErZJls7LTJaMzs4MAbvBwBf81s/pubhtml |
-| Database Spreadsheet (Editable - Need permissions) | https://docs.google.com/spreadsheets/d/1h--RjH3UhP3iS9mq158zxXM69EmpxgYdNtfF6hE3Fl4/edit |
-| Add new room | https://forms.gle/Mk7py19nudkQYmMw8 |
-| Request changes / give feedback / contact the team | https://forms.gle/CNaFewf6XCCVT3LX6 |
+|-|----------|
+| Database Spreadsheet (View only) | *todo* |
+| Database Spreadsheet (Editable - Need permissions) | *todo* |
+| Add new room | *todo* |
+| Request changes / give feedback / contact the team | *todo* |
 
 ## Architecture 
 <img src="https://raw.githubusercontent.com/DilwoarH/cross-gov-multi-faith-rooms/master/assets/images/XGOV-MF-ROOMS-Architecture.png" width="100%"/>
