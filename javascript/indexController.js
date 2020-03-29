@@ -32,13 +32,13 @@ IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 	mentors = mentors.map(mentor => {
 
 		if (!mentor["Timestamp"] || !mentor["Timestamp"].length) {
-		  return null;
+			return null;
 		}
 
 		return {
 			createdDate: mentor["Timestamp"],
 			name: mentor["Name"],
-			email: mentor["Email"],
+			email: mentor["Email Address"],
 			linkedinUrl: mentor["Please provide a link to your professional profile (e.g. LinkedIn)"],
 			currentJob: mentor["Current job"],
 			bio: mentor["Tell us a little about yourself (Please give a longer description of at least 380 characters)"],
@@ -48,10 +48,8 @@ IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 			preferredFormats: mentor["What format would you like to mentor your mentee?"].split(",")
 		}
 	})
-	.filter(Boolean)
-	.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
-
-	console.log("mentors", mentors);
+		.filter(Boolean)
+		.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
 	tableBody.innerHTML = nunjucks.render('all-cards.html', { mentors: mentors });
 };
@@ -76,7 +74,7 @@ IndexController.prototype.initLinkTracking = function () {
  ************************/
 IndexController.prototype.initTableSearch = function () {
 	document
-		.getElementById("table-search")
+		.getElementById("search")
 		.addEventListener(
 			'keyup',
 			this.tableSearch,
@@ -85,19 +83,33 @@ IndexController.prototype.initTableSearch = function () {
 };
 
 IndexController.prototype.tableSearch = function () {
-	var input = document.getElementById("table-search");
-	var filter = input.value.toUpperCase();
+	var input = document.getElementById("search");
+	var filter = input.value.toLowerCase();
 	var table = document.getElementById("mentor-list");
 	var tr = table.getElementsByTagName("article");
+
 	for (var i = 0; i < tr.length; i++) {
+
 		var td = tr[i].querySelector("#mentor-name");
-		if (td) {
-			var txtValue = td.textContent || td.innerText;
-			if (txtValue.toUpperCase().indexOf(filter) > -1) {
-				tr[i].style.display = "";
-			} else {
-				tr[i].style.display = "none";
-			}
+
+		if (!td) {
+			continue;
+		}
+
+		tr[i].style.display = "none";
+
+		const specialities = [...tr[i].querySelector("#specialities-list").getElementsByTagName("span")].map(el => el.innerText);
+
+		var txtValue = td.textContent || td.innerText;
+
+		if (txtValue.toLowerCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+			continue;
+		}
+
+		if (specialities.join(" ").toLowerCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+			continue;
 		}
 	}
 };
@@ -108,15 +120,13 @@ IndexController.prototype._mapSpecialities = function (string) {
 		return [];
 	}
 
-	console.log(string);
-
 	let specialities = string.split(",").map(speciality => {
 		if (!speciality) {
 			return null;
 		}
 
 		speciality = speciality.toLowerCase();
-		
+
 		if (speciality.indexOf("technology & tooling") > -1) {
 			return { name: "Technology & Tooling", color: "orange" };
 		}
@@ -191,8 +201,8 @@ IndexController.prototype._mapSpecialities = function (string) {
 
 		return null;
 	})
-	.filter(Boolean);
-	
+		.filter(Boolean);
+
 	return specialities;
 };
 

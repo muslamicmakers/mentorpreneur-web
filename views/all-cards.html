@@ -1,31 +1,40 @@
 {% for mentor in mentors %}
 <article class="w-100">
-	<div class="bg-white br3 pa3 ma3 ba b--lightest-blue">
+	<div class="bg-white br3 pa3 ma3 ba b--mm-blue">
 		<div class="tc">
-			<h1 id="mentor-name" class="f4 ttc navy">{{ mentor.name }}
+			<h1 id="mentor-name" class="f4 ttc mm-blue">{{ mentor.name }}
 				{% if mentor.linkedinUrl %}
 				<a class="linkedin" href="{{mentor.linkedinUrl}}"><i class="fa fa-linkedin-square"></i></a>
 				{% endif %}
 			</h1>
-			<p class="navy">{{ mentor.currentJob }}</p>
+			<p class="mm-blue">{{ mentor.currentJob }}</p>
 			<hr class="mw3 bb bw1 b--black-10">
 		</div>
 		<p class="lh-copy f6 black-70">
 			{{ mentor.bio }}
 		</p>
 
+		<div class="flex flex-wrap mentor-email mb3">
+			<div class="w-100 w-20-ns mb1">
+				Email:
+			</div>
+			<div class="w-100 w-80-ns">
+				{{ mentor.email }}
+			</div>
+		</div>
+
 		<div class="flex flex-wrap mentor-specialities mb3">
 			<div class="w-100 w-20-ns mb1">
 				Specialities
 			</div>
-			<div class="w-100 w-80-ns">
+			<div class="w-100 w-80-ns" id="specialities-list">
 				{% for speciality in mentor.specialities %}
 				<span class="f6 dim br-pill mb1 ph2 pv1 white bg-{{ speciality.color }} dib">{{ speciality.name }}</span>
 				{% endfor %}
 			</div>
 		</div>
 
-		<div class="flex flex-wrap mentor-preferred-formats">
+		<div class="flex flex-wrap mentor-preferred-formats mb3">
 			<div class="w-100 w-20-ns mb1">
 				Preferred Formats:
 			</div>
