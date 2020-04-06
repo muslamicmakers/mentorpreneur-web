@@ -107,64 +107,85 @@ IndexController.prototype.initFilterTags = function () {
 		{ name: "Film / Photography / Sound / Visual", color: "yellow", value: "film/ photography/ sound/ visual" },
 		{ name: "Policy / Campaigning / NGOs", color: "yellow", value: "policy/ campaigning/ ngos" }
 	]
-	
+
 	filterTagsElement.innerHTML = nunjucks.render('filter-tags-list.html', { tags: tags });
 
 	tags.forEach(tag => {
 		document
-		.getElementById("tag-" + tag.value)
-		.addEventListener(
-			'click',
-			(event) => {
+			.getElementById("tag-" + tag.value)
+			.addEventListener(
+				'click',
+				(event) => {
 
-				document.getElementById(event.srcElement.id).classList.toggle("selected");
+					if (!event || !event.srcElement || !event.srcElement.innerText) {
+						return;
+					}
 
-				if (this.selectedTags.indexOf(event.srcElement.id) > -1) {
-					this.selectedTags = this.selectedTags.filter(t => t.indexOf(event.srcElement.id) < 0);
+					const sanitized = event.srcElement.innerText.toLowerCase();
+
+					document.getElementById(event.srcElement.id).classList.toggle("selected");
+
+					if (this.selectedTags.indexOf(sanitized) > -1) {
+						this.selectedTags = this.selectedTags.filter(t => t.indexOf(sanitized) < 0);
+						console.log("selectedTags", this.selectedTags);
+						this.tableSearch();
+						return;
+					}
+
+					this.selectedTags.push(sanitized);
+
 					console.log("selectedTags", this.selectedTags);
-					return;
-				}
-
-				this.selectedTags.push(event.srcElement.id);
-
-				console.log("selectedTags", this.selectedTags);
-			},
-			false
-		);
+					this.tableSearch();
+				},
+				false
+			);
 	});
 };
 
 IndexController.prototype.tableSearch = function () {
-	var input = document.getElementById("search");
-	var filter = input.value.toLowerCase();
 	var table = document.getElementById("mentor-list");
 	var tr = table.getElementsByTagName("article");
 
-	for (var i = 0; i < tr.length; i++) {
-
-		var td = tr[i].querySelector("#mentor-name");
-
-		if (!td) {
-			continue;
+	if (this.selectedTags.length < 1) {
+		for (var i = 0; i < tr.length; i++) {
+			tr[i].style.display = "";
 		}
+
+		return;
+	}
+
+	for (var i = 0; i < tr.length; i++) {
 
 		tr[i].style.display = "none";
 
 		const specialities = [...tr[i].querySelector("#specialities-list").getElementsByTagName("span")].map(el => el.innerText);
-
-		var txtValue = td.textContent || td.innerText;
-
-		if (txtValue.toLowerCase().indexOf(filter) > -1) {
-			tr[i].style.display = "";
-			continue;
-		}
-
-		if (specialities.join(" ").toLowerCase().indexOf(filter) > -1) {
+		
+		if (this._matchSpecialities(this.selectedTags, specialities) === true) {
 			tr[i].style.display = "";
 			continue;
 		}
 	}
 };
+
+IndexController.prototype._matchSpecialities = (array1, array2) => {
+
+	console.log("2 arrays", {selectedTags: array1, specialities: array2});
+
+	for (let i = 0; i < array1.length; i++) {
+		for (let j = 0; j < array2.length; j++) {
+
+			if (!array1[i] || !array2[j]) {
+				return false;
+			}
+
+			if (array1[i].toLowerCase() === array2[j].toLowerCase()) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 
 IndexController.prototype._mapSpecialities = function (string) {
 
@@ -180,75 +201,75 @@ IndexController.prototype._mapSpecialities = function (string) {
 		speciality = speciality.toLowerCase();
 
 		if (speciality.indexOf("technology & tooling") > -1) {
-			return { name: "Technology & Tooling", color: "orange" };
+			return { name: "Technology & Tooling", color: "orange", value: "technology & tooling" };
 		}
 
 		if (speciality.indexOf("marketing/ social/ pr/ content/ ads") > -1) {
-			return { name: "Marketing / Social / PR / Content / Ads", color: "orange" };
+			return { name: "Marketing / Social / PR / Content / Ads", color: "orange", value: "marketing/ social/ pr/ content/ ads" };
 		}
 
 		if (speciality.indexOf("growth") > -1) {
-			return { name: "Growth", color: "orange" };
+			return { name: "Growth", color: "orange", value: "growth" };
 		}
 
 		if (speciality.indexOf("funding/ seeding") > -1) {
-			return { name: "Funding / Seeding", color: "orange" };
+			return { name: "Funding / Seeding", color: "orange", value: "funding/ seeding" };
 		}
 
 		if (speciality.indexOf("customer experience & design") > -1) {
-			return { name: "Customer Experience & Design", color: "orange" };
+			return { name: "Customer Experience & Design", color: "orange", value: "customer experience & design" };
 		}
 
 		if (speciality.indexOf("business model/strategy") > -1) {
-			return { name: "Business Model / Strategy", color: "orange" };
+			return { name: "Business Model / Strategy", color: "orange", value: "business model/strategy" };
 		}
 
 		if (speciality.indexOf("data based technology") > -1) {
-			return { name: "Data Based Technology", color: "gold" };
+			return { name: "Data Based Technology", color: "gold", value: "data based technology" };
 		}
 
 		if (speciality.indexOf("physical prototyping") > -1) {
-			return { name: "Physical Prototyping", color: "gold" };
+			return { name: "Physical Prototyping", color: "gold", value: "physical prototyping" };
 		}
 
 		if (speciality.indexOf("sales/ customer success/ leads/ pricing") > -1) {
-			return { name: "Sales / Customer Success / Leads / Pricing", color: "gold" };
+			return { name: "Sales / Customer Success / Leads / Pricing", color: "gold", value: "sales/ customer success/ leads/ pricing" };
 		}
 
 		if (speciality.indexOf("legal (all)/ employment/ hr") > -1) {
-			return { name: "Legal / Employment / HR", color: "gold" };
+			return { name: "Legal / Employment / HR", color: "gold", value: "legal (all)/ employment/ hr" };
 		}
 
 		if (speciality.indexOf("finance/ book-keeping/ admin") > -1) {
-			return { name: "Finance / Book-keeping / Admin", color: "gold" };
+			return { name: "Finance / Book-keeping / Admin", color: "gold", value: "finance/ book-keeping/ admin" };
 		}
 
 		if (speciality.indexOf("confidence/ presenting/ pitching") > -1) {
-			return { name: "Confidence / Pitching / Presenting", color: "gold" };
+			return { name: "Confidence / Pitching / Presenting", color: "gold", value: "confidence/ presenting/ pitching" };
 		}
 
 		if (speciality.indexOf("soft skills/ management &team skills") > -1) {
-			return { name: "Soft Skills / Management & Team Skills", color: "gold" };
+			return { name: "Soft Skills / Management & Team Skills", color: "gold", value: "soft skills/ management &team skills" };
 		}
 
 		if (speciality.indexOf("cvs/ career strategy/ interviews") > -1) {
-			return { name: "CVs / Career Strategy / Interviews", color: "yellow" };
+			return { name: "CVs / Career Strategy / Interviews", color: "yellow", value: "cvs/ career strategy/ interviews" };
 		}
 
 		if (speciality.indexOf("branding/ design/ packaging") > -1) {
-			return { name: "Branding / Design / Packaging", color: "yellow" };
+			return { name: "Branding / Design / Packaging", color: "yellow", value: "branding/ design/ packaging" };
 		}
 
 		if (speciality.indexOf("community/ memberships") > -1) {
-			return { name: "Community / Memberships", color: "yellow" };
+			return { name: "Community / Memberships", color: "yellow", value: "community/ memberships" };
 		}
 
 		if (speciality.indexOf("film/ photography/ sound/ visual") > -1) {
-			return { name: "Film / Photography / Sound / Visual", color: "yellow" };
+			return { name: "Film / Photography / Sound / Visual", color: "yellow", value: "film/ photography/ sound/ visual" };
 		}
 
 		if (speciality.indexOf("policy/ campaigning/ ngos") > -1) {
-			return { name: "Policy / Campaigning / NGOs", color: "yellow" };
+			return { name: "Policy / Campaigning / NGOs", color: "yellow", value: "policy/ campaigning/ ngos" };
 		}
 
 		return null;
