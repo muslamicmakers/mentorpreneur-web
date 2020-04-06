@@ -34,6 +34,17 @@
 			</div>
 		</div>
 
+		{% if mentor.specialitiesOther %}
+			<div class="flex flex-wrap mentor-specialities mb3">
+				<div class="w-100 w-20-ns mb1">
+					Other specialities
+				</div>
+				<div class="w-100 w-80-ns" id="specialities-other">
+					{{ mentor.specialitiesOther }}
+				</div>
+			</div>
+		{% endif %}
+
 		<div class="flex flex-wrap mentor-preferred-formats mb3">
 			<div class="w-100 w-20-ns mb1">
 				Preferred Formats:
