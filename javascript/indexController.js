@@ -7,6 +7,7 @@ function IndexController() {
 	this.initFilterTags();
 }
 
+
 /************************
  *    POPULATE LIST
  ************************/
@@ -24,9 +25,6 @@ IndexController.prototype.populateList = function () {
 	});
 };
 
-/*
- * @todo: Use a templating engine rather than JS
- */
 IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 
 	mentors = mentors.map(mentor => {
@@ -181,6 +179,7 @@ IndexController.prototype._mapSpecialities = function (string) {
 
 	return specialities;
 };
+
 
 /************************
  *      INIT
