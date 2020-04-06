@@ -1,5 +1,6 @@
 function IndexController() {
 	this.locationCSV = "https://docs.google.com/spreadsheets/d/1FhG9DojL9VVpJ49GlX1Mwkf9wXcWx_Y_3W8zeYpWEEQ/export?format=csv";
+	this.selectedTags = [];
 
 	this.populateTable();
 	// this.initTableSearch();
@@ -84,9 +85,53 @@ IndexController.prototype.initTableSearch = function () {
 };
 
 IndexController.prototype.initFilterTags = function () {
-	const filterTags = document.getElementById("filter-tags-list");
+	const filterTagsElement = document.getElementById("filter-tags-list");
+
+	const tags = [
+		{ name: "Technology & Tooling", color: "orange", value: "technology & tooling" },
+		{ name: "Marketing / Social / PR / Content / Ads", color: "orange", value: "marketing/ social/ pr/ content/ ads" },
+		{ name: "Growth", color: "orange", value: "growth" },
+		{ name: "Funding / Seeding", color: "orange", value: "funding/ seeding" },
+		{ name: "Customer Experience & Design", color: "orange", value: "customer experience & design" },
+		{ name: "Business Model / Strategy", color: "orange", value: "business model/strategy" },
+		{ name: "Data Based Technology", color: "gold", value: "data based technology" },
+		{ name: "Physical Prototyping", color: "gold", value: "physical prototyping" },
+		{ name: "Sales / Customer Success / Leads / Pricing", color: "gold", value: "sales/ customer success/ leads/ pricing" },
+		{ name: "Legal / Employment / HR", color: "gold", value: "legal (all)/ employment/ hr" },
+		{ name: "Finance / Book-keeping / Admin", color: "gold", value: "finance/ book-keeping/ admin" },
+		{ name: "Confidence / Pitching / Presenting", color: "gold", value: "confidence/ presenting/ pitching" },
+		{ name: "Soft Skills / Management & Team Skills", color: "gold", value: "soft skills/ management &team skills" },
+		{ name: "CVs / Career Strategy / Interviews", color: "yellow", value: "cvs/ career strategy/ interviews" },
+		{ name: "Branding / Design / Packaging", color: "yellow", value: "branding/ design/ packaging" },
+		{ name: "Community / Memberships", color: "yellow", value: "community/ memberships" },
+		{ name: "Film / Photography / Sound / Visual", color: "yellow", value: "film/ photography/ sound/ visual" },
+		{ name: "Policy / Campaigning / NGOs", color: "yellow", value: "policy/ campaigning/ ngos" }
+	]
 	
-	filterTags.innerHTML = nunjucks.render('filter-tags-list.html', { tags: ["test", "test2"] });
+	filterTagsElement.innerHTML = nunjucks.render('filter-tags-list.html', { tags: tags });
+
+	tags.forEach(tag => {
+		document
+		.getElementById("tag-" + tag.value)
+		.addEventListener(
+			'click',
+			(event) => {
+
+				document.getElementById(event.srcElement.id).classList.toggle("selected");
+
+				if (this.selectedTags.indexOf(event.srcElement.id) > -1) {
+					this.selectedTags = this.selectedTags.filter(t => t.indexOf(event.srcElement.id) < 0);
+					console.log("selectedTags", this.selectedTags);
+					return;
+				}
+
+				this.selectedTags.push(event.srcElement.id);
+
+				console.log("selectedTags", this.selectedTags);
+			},
+			false
+		);
+	});
 };
 
 IndexController.prototype.tableSearch = function () {

@@ -9,3 +9,8 @@
 .b--mm-blue {
     border-color: #14133B;
 }
+
+#filter-tags-list span.br-pill:not(.selected) {
+	background-color: #e0e0e0;
+	color: black;
+}
