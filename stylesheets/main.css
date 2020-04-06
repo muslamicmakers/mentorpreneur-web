@@ -308,3 +308,13 @@ body {
   .linkedin a:any-link {
 	  color: #000000;
   }
+
+#filter-tags-list span.br-pill {
+	-webkit-transition: background-color .35s ease-in;
+    transition: background-color 0.35s ease-in;
+}
+
+#filter-tags-list span.br-pill:not(.selected):not(:hover) {
+	background-color: #e0e0e0;
+	color: black;
+}

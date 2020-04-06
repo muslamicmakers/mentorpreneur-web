@@ -1,5 +1,5 @@
-<small id="search-desc" class="f6 black-60 db mb2">Select criteria below to filter results</small>
+<small id="filter-desc" class="f6 black-60 db mb2">Select criteria below to filter results</small>
 
 {% for tag in tags %}
-	<span class="f6 dim br-pill mb1 ph2 pv1 white bg-{{ tag.color }} dib ttc" id="tag-{{ tag.value }}">{{ tag.value }}</span>
+	<span class="f6 br-pill mb1 ph2 pv1 white bg-{{ tag.color }} dib ttc" id="tag-{{ tag.value }}">{{ tag.value }}</span>
 {% endfor %}
