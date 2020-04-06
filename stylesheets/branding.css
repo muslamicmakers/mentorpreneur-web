@@ -10,7 +10,7 @@
     border-color: #14133B;
 }
 
-#filter-tags-list span.br-pill:not(.selected) {
+#filter-tags-list span.br-pill:not(.selected):not(:hover) {
 	background-color: #e0e0e0;
 	color: black;
 }
