@@ -2,8 +2,9 @@ function IndexController() {
 	this.locationCSV = "https://docs.google.com/spreadsheets/d/1FhG9DojL9VVpJ49GlX1Mwkf9wXcWx_Y_3W8zeYpWEEQ/export?format=csv";
 
 	this.populateTable();
-	this.initTableSearch();
+	// this.initTableSearch();
 	nunjucks.configure('views', { autoescape: true });
+	this.initFilterTags();
 }
 
 /************************
@@ -80,6 +81,12 @@ IndexController.prototype.initTableSearch = function () {
 			this.tableSearch,
 			false
 		);
+};
+
+IndexController.prototype.initFilterTags = function () {
+	const filterTags = document.getElementById("filter-tags-list");
+	
+	filterTags.innerHTML = nunjucks.render('filter-tags-list.html', { tags: ["test", "test2"] });
 };
 
 IndexController.prototype.tableSearch = function () {
