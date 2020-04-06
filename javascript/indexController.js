@@ -127,14 +127,11 @@ IndexController.prototype.initFilterTags = function () {
 
 					if (this.selectedTags.indexOf(sanitized) > -1) {
 						this.selectedTags = this.selectedTags.filter(t => t.indexOf(sanitized) < 0);
-						console.log("selectedTags", this.selectedTags);
 						this.tableSearch();
 						return;
 					}
 
 					this.selectedTags.push(sanitized);
-
-					console.log("selectedTags", this.selectedTags);
 					this.tableSearch();
 				},
 				false
@@ -168,8 +165,6 @@ IndexController.prototype.tableSearch = function () {
 };
 
 IndexController.prototype._matchSpecialities = (array1, array2) => {
-
-	console.log("2 arrays", {selectedTags: array1, specialities: array2});
 
 	for (let i = 0; i < array1.length; i++) {
 		for (let j = 0; j < array2.length; j++) {
