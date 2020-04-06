@@ -61,26 +61,7 @@ IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 IndexController.prototype.initFilterTags = function () {
 	const filterTagsElement = document.getElementById("filter-tags-list");
 
-	const tags = [
-		{ name: "Technology & Tooling", color: "orange", value: "technology & tooling" },
-		{ name: "Marketing / Social / PR / Content / Ads", color: "orange", value: "marketing/ social/ pr/ content/ ads" },
-		{ name: "Growth", color: "orange", value: "growth" },
-		{ name: "Funding / Seeding", color: "orange", value: "funding/ seeding" },
-		{ name: "Customer Experience & Design", color: "orange", value: "customer experience & design" },
-		{ name: "Business Model / Strategy", color: "orange", value: "business model/strategy" },
-		{ name: "Data Based Technology", color: "gold", value: "data based technology" },
-		{ name: "Physical Prototyping", color: "gold", value: "physical prototyping" },
-		{ name: "Sales / Customer Success / Leads / Pricing", color: "gold", value: "sales/ customer success/ leads/ pricing" },
-		{ name: "Legal / Employment / HR", color: "gold", value: "legal (all)/ employment/ hr" },
-		{ name: "Finance / Book-keeping / Admin", color: "gold", value: "finance/ book-keeping/ admin" },
-		{ name: "Confidence / Pitching / Presenting", color: "gold", value: "confidence/ presenting/ pitching" },
-		{ name: "Soft Skills / Management & Team Skills", color: "gold", value: "soft skills/ management &team skills" },
-		{ name: "CVs / Career Strategy / Interviews", color: "yellow", value: "cvs/ career strategy/ interviews" },
-		{ name: "Branding / Design / Packaging", color: "yellow", value: "branding/ design/ packaging" },
-		{ name: "Community / Memberships", color: "yellow", value: "community/ memberships" },
-		{ name: "Film / Photography / Sound / Visual", color: "yellow", value: "film/ photography/ sound/ visual" },
-		{ name: "Policy / Campaigning / NGOs", color: "yellow", value: "policy/ campaigning/ ngos" }
-	]
+	const tags = this._getSpecialities();
 
 	filterTagsElement.innerHTML = nunjucks.render('filter-tags-list.html', { tags: tags });
 
@@ -156,94 +137,47 @@ IndexController.prototype._matchSpecialities = (array1, array2) => {
 	return false;
 }
 
+IndexController.prototype._getSpecialities = () => {
+	return [
+		{ name: "Technology & Tooling", color: "orange", value: "technology & tooling" },
+		{ name: "Marketing / Social / PR / Content / Ads", color: "orange", value: "marketing/ social/ pr/ content/ ads" },
+		{ name: "Growth", color: "orange", value: "growth" },
+		{ name: "Funding / Seeding", color: "orange", value: "funding/ seeding" },
+		{ name: "Customer Experience & Design", color: "orange", value: "customer experience & design" },
+		{ name: "Business Model / Strategy", color: "orange", value: "business model/strategy" },
+		{ name: "Data Based Technology", color: "gold", value: "data based technology" },
+		{ name: "Physical Prototyping", color: "gold", value: "physical prototyping" },
+		{ name: "Sales / Customer Success / Leads / Pricing", color: "gold", value: "sales/ customer success/ leads/ pricing" },
+		{ name: "Legal / Employment / HR", color: "gold", value: "legal (all)/ employment/ hr" },
+		{ name: "Finance / Book-keeping / Admin", color: "gold", value: "finance/ book-keeping/ admin" },
+		{ name: "Confidence / Pitching / Presenting", color: "gold", value: "confidence/ presenting/ pitching" },
+		{ name: "Soft Skills / Management & Team Skills", color: "gold", value: "soft skills/ management &team skills" },
+		{ name: "CVs / Career Strategy / Interviews", color: "yellow", value: "cvs/ career strategy/ interviews" },
+		{ name: "Branding / Design / Packaging", color: "yellow", value: "branding/ design/ packaging" },
+		{ name: "Community / Memberships", color: "yellow", value: "community/ memberships" },
+		{ name: "Film / Photography / Sound / Visual", color: "yellow", value: "film/ photography/ sound/ visual" },
+		{ name: "Policy / Campaigning / NGOs", color: "yellow", value: "policy/ campaigning/ ngos" }
+	]
+}
+
 IndexController.prototype._mapSpecialities = function (string) {
 
 	if (!string) {
 		return [];
 	}
 
+	const allSpecialities = this._getSpecialities();
+
 	let specialities = string.split(",").map(speciality => {
 		if (!speciality) {
 			return null;
 		}
 
-		speciality = speciality.toLowerCase();
+		speciality = speciality.toLowerCase().trim();
 
-		if (speciality.indexOf("technology & tooling") > -1) {
-			return { name: "Technology & Tooling", color: "orange", value: "technology & tooling" };
-		}
-
-		if (speciality.indexOf("marketing/ social/ pr/ content/ ads") > -1) {
-			return { name: "Marketing / Social / PR / Content / Ads", color: "orange", value: "marketing/ social/ pr/ content/ ads" };
-		}
-
-		if (speciality.indexOf("growth") > -1) {
-			return { name: "Growth", color: "orange", value: "growth" };
-		}
-
-		if (speciality.indexOf("funding/ seeding") > -1) {
-			return { name: "Funding / Seeding", color: "orange", value: "funding/ seeding" };
-		}
-
-		if (speciality.indexOf("customer experience & design") > -1) {
-			return { name: "Customer Experience & Design", color: "orange", value: "customer experience & design" };
-		}
-
-		if (speciality.indexOf("business model/strategy") > -1) {
-			return { name: "Business Model / Strategy", color: "orange", value: "business model/strategy" };
-		}
-
-		if (speciality.indexOf("data based technology") > -1) {
-			return { name: "Data Based Technology", color: "gold", value: "data based technology" };
-		}
-
-		if (speciality.indexOf("physical prototyping") > -1) {
-			return { name: "Physical Prototyping", color: "gold", value: "physical prototyping" };
-		}
-
-		if (speciality.indexOf("sales/ customer success/ leads/ pricing") > -1) {
-			return { name: "Sales / Customer Success / Leads / Pricing", color: "gold", value: "sales/ customer success/ leads/ pricing" };
-		}
-
-		if (speciality.indexOf("legal (all)/ employment/ hr") > -1) {
-			return { name: "Legal / Employment / HR", color: "gold", value: "legal (all)/ employment/ hr" };
-		}
-
-		if (speciality.indexOf("finance/ book-keeping/ admin") > -1) {
-			return { name: "Finance / Book-keeping / Admin", color: "gold", value: "finance/ book-keeping/ admin" };
-		}
-
-		if (speciality.indexOf("confidence/ presenting/ pitching") > -1) {
-			return { name: "Confidence / Pitching / Presenting", color: "gold", value: "confidence/ presenting/ pitching" };
-		}
-
-		if (speciality.indexOf("soft skills/ management &team skills") > -1) {
-			return { name: "Soft Skills / Management & Team Skills", color: "gold", value: "soft skills/ management &team skills" };
-		}
-
-		if (speciality.indexOf("cvs/ career strategy/ interviews") > -1) {
-			return { name: "CVs / Career Strategy / Interviews", color: "yellow", value: "cvs/ career strategy/ interviews" };
-		}
-
-		if (speciality.indexOf("branding/ design/ packaging") > -1) {
-			return { name: "Branding / Design / Packaging", color: "yellow", value: "branding/ design/ packaging" };
-		}
-
-		if (speciality.indexOf("community/ memberships") > -1) {
-			return { name: "Community / Memberships", color: "yellow", value: "community/ memberships" };
-		}
-
-		if (speciality.indexOf("film/ photography/ sound/ visual") > -1) {
-			return { name: "Film / Photography / Sound / Visual", color: "yellow", value: "film/ photography/ sound/ visual" };
-		}
-
-		if (speciality.indexOf("policy/ campaigning/ ngos") > -1) {
-			return { name: "Policy / Campaigning / NGOs", color: "yellow", value: "policy/ campaigning/ ngos" };
-		}
-
-		return null;
+		return allSpecialities.find(s => s.value === speciality);
 	})
-		.filter(Boolean);
+	.filter(Boolean);
 
 	return specialities;
 };
