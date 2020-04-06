@@ -2,8 +2,7 @@ function IndexController() {
 	this.locationCSV = "https://docs.google.com/spreadsheets/d/1FhG9DojL9VVpJ49GlX1Mwkf9wXcWx_Y_3W8zeYpWEEQ/export?format=csv";
 	this.selectedTags = [];
 
-	this.populateTable();
-	// this.initTableSearch();
+	this.populateList();
 	nunjucks.configure('views', { autoescape: true });
 	this.initFilterTags();
 }
@@ -11,7 +10,7 @@ function IndexController() {
 /************************
  *    POPULATE LIST
  ************************/
-IndexController.prototype.populateTable = function () {
+IndexController.prototype.populateList = function () {
 	var _this = this;
 	Papa.parse(this.locationCSV, {
 		header: true,
@@ -21,7 +20,6 @@ IndexController.prototype.populateTable = function () {
 				document.querySelectorAll('#mentor-list')[0],
 				results.data
 			);
-			_this.initLinkTracking();
 		}
 	});
 };
@@ -56,34 +54,10 @@ IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 	tableBody.innerHTML = nunjucks.render('all-cards.html', { mentors: mentors });
 };
 
-IndexController.prototype.initLinkTracking = function () {
-	var links = document.getElementsByTagName("a");
-	for (var i = 0; i < links.length; i++) {
-		links[i].addEventListener(
-			'click',
-			function (event) {
-				if (window._analytics) {
-					window._analytics.trackEvent("linkClicked", event.target.innerText, event.target.href);
-				}
-			},
-			false
-		);
-	}
-};
 
 /************************
- *      SEARCH
+ *      FILTERING
  ************************/
-IndexController.prototype.initTableSearch = function () {
-	document
-		.getElementById("search")
-		.addEventListener(
-			'keyup',
-			this.tableSearch,
-			false
-		);
-};
-
 IndexController.prototype.initFilterTags = function () {
 	const filterTagsElement = document.getElementById("filter-tags-list");
 
@@ -127,38 +101,38 @@ IndexController.prototype.initFilterTags = function () {
 
 					if (this.selectedTags.indexOf(sanitized) > -1) {
 						this.selectedTags = this.selectedTags.filter(t => t.indexOf(sanitized) < 0);
-						this.tableSearch();
+						this.filterTable();
 						return;
 					}
 
 					this.selectedTags.push(sanitized);
-					this.tableSearch();
+					this.filterTable();
 				},
 				false
 			);
 	});
 };
 
-IndexController.prototype.tableSearch = function () {
+IndexController.prototype.filterTable = function () {
 	var table = document.getElementById("mentor-list");
-	var tr = table.getElementsByTagName("article");
+	var mentors = table.getElementsByTagName("article");
 
 	if (this.selectedTags.length < 1) {
-		for (var i = 0; i < tr.length; i++) {
-			tr[i].style.display = "";
+		for (var i = 0; i < mentors.length; i++) {
+			mentors[i].style.display = "";
 		}
 
 		return;
 	}
 
-	for (var i = 0; i < tr.length; i++) {
+	for (var i = 0; i < mentors.length; i++) {
 
-		tr[i].style.display = "none";
+		mentors[i].style.display = "none";
 
-		const specialities = [...tr[i].querySelector("#specialities-list").getElementsByTagName("span")].map(el => el.innerText);
+		const specialities = [...mentors[i].querySelector("#specialities-list").getElementsByTagName("span")].map(el => el.innerText);
 		
 		if (this._matchSpecialities(this.selectedTags, specialities) === true) {
-			tr[i].style.display = "";
+			mentors[i].style.display = "";
 			continue;
 		}
 	}
