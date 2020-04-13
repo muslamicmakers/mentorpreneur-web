@@ -29,10 +29,21 @@
 			</div>
 			<div class="w-100 w-80-ns" id="specialities-list">
 				{% for speciality in mentor.specialities %}
-				<span class="f6 dim br-pill mb1 ph2 pv1 white bg-{{ speciality.color }} dib">{{ speciality.name }}</span>
+				<span class="f6 dim br-pill mb1 ph2 pv1 white bg-{{ speciality.color }} dib ttc">{{ speciality.value }}</span>
 				{% endfor %}
 			</div>
 		</div>
+
+		{% if mentor.specialitiesOther %}
+			<div class="flex flex-wrap mentor-specialities mb3">
+				<div class="w-100 w-20-ns mb1">
+					Other specialities
+				</div>
+				<div class="w-100 w-80-ns" id="specialities-other">
+					{{ mentor.specialitiesOther }}
+				</div>
+			</div>
+		{% endif %}
 
 		<div class="flex flex-wrap mentor-preferred-formats mb3">
 			<div class="w-100 w-20-ns mb1">

@@ -1,15 +1,18 @@
 function IndexController() {
 	this.locationCSV = "https://docs.google.com/spreadsheets/d/1FhG9DojL9VVpJ49GlX1Mwkf9wXcWx_Y_3W8zeYpWEEQ/export?format=csv";
+	this.selectedTags = [];
 
-	this.populateTable();
-	this.initTableSearch();
+	this.populateList();
 	nunjucks.configure('views', { autoescape: true });
+	this.initFilterTags();
+	this.initSeeAllFiltersButton();
 }
+
 
 /************************
  *    POPULATE LIST
  ************************/
-IndexController.prototype.populateTable = function () {
+IndexController.prototype.populateList = function () {
 	var _this = this;
 	Papa.parse(this.locationCSV, {
 		header: true,
@@ -19,14 +22,10 @@ IndexController.prototype.populateTable = function () {
 				document.querySelectorAll('#mentor-list')[0],
 				results.data
 			);
-			_this.initLinkTracking();
 		}
 	});
 };
 
-/*
- * @todo: Use a templating engine rather than JS
- */
 IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 
 	mentors = mentors.map(mentor => {
@@ -54,65 +53,121 @@ IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 	tableBody.innerHTML = nunjucks.render('all-cards.html', { mentors: mentors });
 };
 
-IndexController.prototype.initLinkTracking = function () {
-	var links = document.getElementsByTagName("a");
-	for (var i = 0; i < links.length; i++) {
-		links[i].addEventListener(
-			'click',
-			function (event) {
-				if (window._analytics) {
-					window._analytics.trackEvent("linkClicked", event.target.innerText, event.target.href);
-				}
-			},
-			false
-		);
-	}
-};
 
 /************************
- *      SEARCH
+ *      FILTERING
  ************************/
-IndexController.prototype.initTableSearch = function () {
-	document
-		.getElementById("search")
-		.addEventListener(
-			'keyup',
-			this.tableSearch,
-			false
-		);
+IndexController.prototype.initFilterTags = function () {
+	const filterTagsElement = document.getElementById("filter-tags-list");
+
+	const tags = this._getSpecialities();
+
+	filterTagsElement.innerHTML = nunjucks.render('filter-tags-list.html', { tags: tags });
+
+	tags.forEach(tag => {
+		document
+			.getElementById("tag-" + tag.value)
+			.addEventListener(
+				'click',
+				(event) => {
+
+					if (!event || !event.srcElement || !event.srcElement.innerText) {
+						return;
+					}
+
+					const sanitized = event.srcElement.innerText.toLowerCase();
+
+					document.getElementById(event.srcElement.id).classList.toggle("selected");
+
+					if (this.selectedTags.indexOf(sanitized) > -1) {
+						this.selectedTags = this.selectedTags.filter(t => t.indexOf(sanitized) < 0);
+						this.filterTable();
+						return;
+					}
+
+					this.selectedTags.push(sanitized);
+					this.filterTable();
+				},
+				false
+			);
+	});
 };
 
-IndexController.prototype.tableSearch = function () {
-	var input = document.getElementById("search");
-	var filter = input.value.toLowerCase();
+IndexController.prototype.filterTable = function () {
 	var table = document.getElementById("mentor-list");
-	var tr = table.getElementsByTagName("article");
+	var mentors = table.getElementsByTagName("article");
 
-	for (var i = 0; i < tr.length; i++) {
-
-		var td = tr[i].querySelector("#mentor-name");
-
-		if (!td) {
-			continue;
+	if (this.selectedTags.length < 1) {
+		for (var i = 0; i < mentors.length; i++) {
+			mentors[i].style.display = "";
 		}
 
-		tr[i].style.display = "none";
+		return;
+	}
 
-		const specialities = [...tr[i].querySelector("#specialities-list").getElementsByTagName("span")].map(el => el.innerText);
+	for (var i = 0; i < mentors.length; i++) {
 
-		var txtValue = td.textContent || td.innerText;
+		mentors[i].style.display = "none";
 
-		if (txtValue.toLowerCase().indexOf(filter) > -1) {
-			tr[i].style.display = "";
-			continue;
-		}
-
-		if (specialities.join(" ").toLowerCase().indexOf(filter) > -1) {
-			tr[i].style.display = "";
+		const specialities = [...mentors[i].querySelector("#specialities-list").getElementsByTagName("span")].map(el => el.innerText);
+		
+		if (this._matchSpecialities(this.selectedTags, specialities) === true) {
+			mentors[i].style.display = "";
 			continue;
 		}
 	}
 };
+
+IndexController.prototype.initSeeAllFiltersButton = () => {
+
+	document.getElementById("show-hide-filters").addEventListener(
+		'click',
+		(event) => {
+			document.getElementById("filter-tags-wrapper").classList.toggle("collapsed");
+		}
+	);
+}
+
+IndexController.prototype._matchSpecialities = (array1, array2) => {
+
+	for (let i = 0; i < array1.length; i++) {
+		for (let j = 0; j < array2.length; j++) {
+
+			if (!array1[i] || !array2[j]) {
+				return false;
+			}
+
+			if (array1[i].toLowerCase() === array2[j].toLowerCase()) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+IndexController.prototype._getSpecialities = () => {
+	return [
+		{ name: "Technology & Tooling", color: "orange", value: "technology & tooling" },
+		{ name: "Marketing / Social / PR / Content / Ads", color: "orange", value: "marketing/ social/ pr/ content/ ads" },
+		{ name: "Growth", color: "orange", value: "growth" },
+		{ name: "Funding / Seeding", color: "orange", value: "funding/ seeding" },
+		{ name: "Customer Experience & Design", color: "orange", value: "customer experience & design" },
+		{ name: "Business Model / Strategy", color: "orange", value: "business model/strategy" },
+		{ name: "Data Based Technology", color: "gold", value: "data based technology" },
+		{ name: "Physical Prototyping", color: "gold", value: "physical prototyping" },
+		{ name: "Sales / Customer Success / Leads / Pricing", color: "gold", value: "sales/ customer success/ leads/ pricing" },
+		{ name: "Legal / Employment / HR", color: "gold", value: "legal (all)/ employment/ hr" },
+		{ name: "Finance / Book-keeping / Admin", color: "gold", value: "finance/ book-keeping/ admin" },
+		{ name: "Confidence / Pitching / Presenting", color: "gold", value: "confidence/ presenting/ pitching" },
+		{ name: "Soft Skills / Management & Team Skills", color: "gold", value: "soft skills/ management &team skills" },
+		{ name: "CVs / Career Strategy / Interviews", color: "yellow", value: "cvs/ career strategy/ interviews" },
+		{ name: "Branding / Design / Packaging", color: "yellow", value: "branding/ design/ packaging" },
+		{ name: "Community / Memberships", color: "yellow", value: "community/ memberships" },
+		{ name: "Film / Photography / Sound / Visual", color: "yellow", value: "film/ photography/ sound/ visual" },
+		{ name: "Policy / Campaigning / NGOs", color: "yellow", value: "policy/ campaigning/ ngos" }
+	]
+}
 
 IndexController.prototype._mapSpecialities = function (string) {
 
@@ -120,91 +175,22 @@ IndexController.prototype._mapSpecialities = function (string) {
 		return [];
 	}
 
+	const allSpecialities = this._getSpecialities();
+
 	let specialities = string.split(",").map(speciality => {
 		if (!speciality) {
 			return null;
 		}
 
-		speciality = speciality.toLowerCase();
+		speciality = speciality.toLowerCase().trim();
 
-		if (speciality.indexOf("technology & tooling") > -1) {
-			return { name: "Technology & Tooling", color: "orange" };
-		}
-
-		if (speciality.indexOf("marketing/ social/ pr/ content/ ads") > -1) {
-			return { name: "Marketing / Social / PR / Content / Ads", color: "orange" };
-		}
-
-		if (speciality.indexOf("growth") > -1) {
-			return { name: "Growth", color: "orange" };
-		}
-
-		if (speciality.indexOf("funding/ seeding") > -1) {
-			return { name: "Funding / Seeding", color: "orange" };
-		}
-
-		if (speciality.indexOf("customer experience & design") > -1) {
-			return { name: "Customer Experience & Design", color: "orange" };
-		}
-
-		if (speciality.indexOf("business model/strategy") > -1) {
-			return { name: "Business Model / Strategy", color: "orange" };
-		}
-
-		if (speciality.indexOf("data based technology") > -1) {
-			return { name: "Data Based Technology", color: "gold" };
-		}
-
-		if (speciality.indexOf("physical prototyping") > -1) {
-			return { name: "Physical Prototyping", color: "gold" };
-		}
-
-		if (speciality.indexOf("sales/ customer success/ leads/ pricing") > -1) {
-			return { name: "Sales / Customer Success / Leads / Pricing", color: "gold" };
-		}
-
-		if (speciality.indexOf("legal (all)/ employment/ hr") > -1) {
-			return { name: "Legal / Employment / HR", color: "gold" };
-		}
-
-		if (speciality.indexOf("finance/ book-keeping/ admin") > -1) {
-			return { name: "Finance / Book-keeping / Admin", color: "gold" };
-		}
-
-		if (speciality.indexOf("confidence/ presenting/ pitching") > -1) {
-			return { name: "Confidence / Pitching / Presenting", color: "gold" };
-		}
-
-		if (speciality.indexOf("soft skills/ management &team skills") > -1) {
-			return { name: "Soft Skills / Management & Team Skills", color: "gold" };
-		}
-
-		if (speciality.indexOf("cvs/ career strategy/ interviews") > -1) {
-			return { name: "CVs / Career Strategy / Interviews", color: "yellow" };
-		}
-
-		if (speciality.indexOf("branding/ design/ packaging") > -1) {
-			return { name: "Branding / Design / Packaging", color: "yellow" };
-		}
-
-		if (speciality.indexOf("community/ memberships") > -1) {
-			return { name: "Community / Memberships", color: "yellow" };
-		}
-
-		if (speciality.indexOf("film/ photography/ sound/ visual") > -1) {
-			return { name: "Film / Photography / Sound / Visual", color: "yellow" };
-		}
-
-		if (speciality.indexOf("policy/ campaigning/ ngos") > -1) {
-			return { name: "Policy / Campaigning / NGOs", color: "yellow" };
-		}
-
-		return null;
+		return allSpecialities.find(s => s.value === speciality);
 	})
-		.filter(Boolean);
+	.filter(Boolean);
 
 	return specialities;
 };
+
 
 /************************
  *      INIT
