@@ -5,6 +5,7 @@ function IndexController() {
 	this.populateList();
 	nunjucks.configure('views', { autoescape: true });
 	this.initFilterTags();
+	this.initSeeAllFiltersButton();
 }
 
 
@@ -116,6 +117,16 @@ IndexController.prototype.filterTable = function () {
 		}
 	}
 };
+
+IndexController.prototype.initSeeAllFiltersButton = () => {
+
+	document.getElementById("show-hide-filters").addEventListener(
+		'click',
+		(event) => {
+			document.getElementById("filter-tags-wrapper").classList.toggle("collapsed");
+		}
+	);
+}
 
 IndexController.prototype._matchSpecialities = (array1, array2) => {
 
