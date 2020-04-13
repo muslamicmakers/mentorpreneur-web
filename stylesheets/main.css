@@ -10,11 +10,11 @@ body {
 }
 
 #filter-tags-list span.br-pill {
-	-webkit-transition: background-color .35s ease-in;
-    transition: background-color 0.35s ease-in;
+	-webkit-transition: border .25s ease-in;
+	transition: border 0.25s ease-in;
+	border: solid 2px transparent;
 }
 
-#filter-tags-list span.br-pill:not(.selected):not(:hover) {
-	background-color: #e0e0e0;
-	color: black;
+#filter-tags-list span.br-pill.selected {
+	border: solid 2px #14133B;
 }
