@@ -1,7 +1,8 @@
 function IndexController() {
-	this.locationCSV = "https://docs.google.com/spreadsheets/d/1FhG9DojL9VVpJ49GlX1Mwkf9wXcWx_Y_3W8zeYpWEEQ/export?format=csv";
+	//this.locationCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0cJHr6XUdX4SemD-ytJVGKr8Ec5iXN8xV2QMNLzKL6RtWnzAXivZqrmeNq91xYnDyOB45zwGvQbkE/pub?gid=1430460592&single=true&output=csv";
+	this.locationCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQF2RKzoOOIrFW1gOvyZPgwvDk1636OHuYML9wocmdrW7VimohCxHw4_-VqRqSKI3NnXE3jjYOWucOA/pub?output=csv";
 	this.selectedTags = [];
-
+	
 	this.populateList();
 	nunjucks.configure('views', { autoescape: true });
 	this.initFilterTags();
@@ -44,7 +45,8 @@ IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 			specialities: this._mapSpecialities(mentor["Please select all of your specialties"]),
 			specialitiesOther: mentor["If you have a specialty that wasn't listed please elaborate below."],
 			hasPreviouslyMentored: mentor["Have you ever been a mentor in a more formal setting?"],
-			preferredFormats: mentor["What format would you like to mentor your mentee?"].split(",")
+			preferredFormats: mentor["What format would you like to mentor your mentee? "].split(","),
+			calendly: mentor["Personal Calendly Link (https://calendly.com)"]
 		}
 	})
 		.filter(Boolean)
@@ -110,7 +112,7 @@ IndexController.prototype.filterTable = function () {
 		mentors[i].style.display = "none";
 
 		const specialities = [...mentors[i].querySelector("#specialities-list").getElementsByTagName("span")].map(el => el.innerText);
-		
+
 		if (this._matchSpecialities(this.selectedTags, specialities) === true) {
 			mentors[i].style.display = "";
 			continue;
