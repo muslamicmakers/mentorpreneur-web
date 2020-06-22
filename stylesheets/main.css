@@ -20,14 +20,11 @@ body {
 }
 
 #filter-tags-wrapper {
-	position: relative;
-	max-height: 2rem;
-	overflow: hidden;
+	display: none;
 }
 
 #filter-tags-wrapper.collapsed {
-	max-height: unset;
-	padding-bottom: 2rem;
+	display: block;
 }
 
 .fader {
