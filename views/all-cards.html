@@ -35,7 +35,13 @@
 			</p>
 		</div>
 		<div class="card-footer d-flex justify-content-end">
-			<a href="{{mentor.calendlyUrl}}" class="btn btn-dark" style="background-color: #14133B; border-color: #14133B"><i class="fa fa-calendar"></i> Schedule</a>
+			{% if mentor.calendlyUrl %}
+				<a href="{{mentor.calendlyUrl}}" target="_blank" class="btn btn-dark" style="background-color: #14133B; border-color: #14133B"><i class="fa fa-calendar"></i> Schedule</a>
+			{% elif mentor.email %}
+				<a href="mailto:{{mentor.email}}" class="btn btn-outline-dark" style="border-color: #14133B"><i class="fa fa-envelope"></i> Email</a>
+			{% else %}
+				<button disabled class="btn btn-outline btn-outline-danger">Currently Unavilable</button>
+			{% endif %}
 		</div>
 	</div>
 </article>
