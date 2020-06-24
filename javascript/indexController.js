@@ -1,11 +1,9 @@
 function IndexController() {
-	this.locationCSV = "https://docs.google.com/spreadsheets/d/1FhG9DojL9VVpJ49GlX1Mwkf9wXcWx_Y_3W8zeYpWEEQ/export?format=csv";
+	this.locationCSV = "https://script.google.com/macros/s/AKfycbziXUFUcLNTpX0rr3n-w2ahvFtgGpQilW1BGNcgH8ql6_je1us/exec";
 	this.selectedTags = [];
-
+	
 	this.populateList();
 	nunjucks.configure('views', { autoescape: true });
-	this.initFilterTags();
-	this.initSeeAllFiltersButton();
 }
 
 
@@ -14,43 +12,45 @@ function IndexController() {
  ************************/
 IndexController.prototype.populateList = function () {
 	var _this = this;
-	Papa.parse(this.locationCSV, {
-		header: true,
-		download: true,
-		complete: function (results) {
-			_this.buildTableBody(
-				document.querySelectorAll('#mentor-list')[0],
-				results.data
-			);
-		}
+
+	fetch(this.locationCSV)
+	.then(response => {
+		return response.json();
+	})
+	.then(mentors => {
+		_this.buildTableBody(
+			document.querySelectorAll('#mentor-list')[0],
+			mentors
+		);
 	});
 };
 
 IndexController.prototype.buildTableBody = function (tableBody, mentors) {
 
+	console.log("mentors", mentors);
+
 	mentors = mentors.map(mentor => {
 
-		if (!mentor["Timestamp"] || !mentor["Timestamp"].length) {
+		if (!mentor.timestamp || !mentor.timestamp.length) {
 			return null;
 		}
 
+		
 		return {
-			createdDate: mentor["Timestamp"],
-			name: mentor["Name"],
-			email: mentor["Email Address"],
-			linkedinUrl: mentor["Please provide a link to your professional profile (e.g. LinkedIn)"],
-			currentJob: mentor["Current job"],
-			bio: mentor["Tell us a little about yourself (Please give a longer description of at least 380 characters)"],
-			specialities: this._mapSpecialities(mentor["Please select all of your specialties"]),
-			specialitiesOther: mentor["If you have a specialty that wasn't listed please elaborate below."],
-			hasPreviouslyMentored: mentor["Have you ever been a mentor in a more formal setting?"],
-			preferredFormats: mentor["What format would you like to mentor your mentee?"].split(",")
+			...mentor,
+			...{
+				skills: this._mapSpecialities(mentor.skills),
+				preferredFormats: mentor.preferredFormats ? mentor.preferredFormats.split(",") : [],
+				shortBio: mentor.bio ? mentor.bio.substring(0, 100) + "..." : "No bio available"
+			}
 		}
 	})
 		.filter(Boolean)
 		.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
 	tableBody.innerHTML = nunjucks.render('all-cards.html', { mentors: mentors });
+	this.initFilterTags();
+	this.initSeeAllFiltersButton();
 };
 
 
@@ -61,6 +61,7 @@ IndexController.prototype.initFilterTags = function () {
 	const filterTagsElement = document.getElementById("filter-tags-list");
 
 	const tags = this._getSpecialities();
+	console.log("tabs", tags);
 
 	filterTagsElement.innerHTML = nunjucks.render('filter-tags-list.html', { tags: tags });
 
@@ -77,7 +78,8 @@ IndexController.prototype.initFilterTags = function () {
 
 					const sanitized = event.srcElement.innerText.toLowerCase();
 
-					document.getElementById(event.srcElement.id).classList.toggle("selected");
+					document.getElementById(event.srcElement.id).classList.toggle("badge-dark");
+					document.getElementById(event.srcElement.id).classList.toggle("badge-info");
 
 					if (this.selectedTags.indexOf(sanitized) > -1) {
 						this.selectedTags = this.selectedTags.filter(t => t.indexOf(sanitized) < 0);
@@ -109,9 +111,9 @@ IndexController.prototype.filterTable = function () {
 
 		mentors[i].style.display = "none";
 
-		const specialities = [...mentors[i].querySelector("#specialities-list").getElementsByTagName("span")].map(el => el.innerText);
-		
-		if (this._matchSpecialities(this.selectedTags, specialities) === true) {
+		const skills = [...mentors[i].querySelector("#skills-list").getElementsByTagName("span")].map(el => el.innerText.trim());
+
+		if (this._matchSpecialities(this.selectedTags, skills) === true) {
 			mentors[i].style.display = "";
 			continue;
 		}
@@ -120,7 +122,7 @@ IndexController.prototype.filterTable = function () {
 
 IndexController.prototype.initSeeAllFiltersButton = () => {
 
-	document.getElementById("show-hide-filters").addEventListener(
+	document.getElementById("show-filters-button").addEventListener(
 		'click',
 		(event) => {
 			document.getElementById("filter-tags-wrapper").classList.toggle("collapsed");

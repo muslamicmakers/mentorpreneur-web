@@ -1,68 +1,47 @@
 {% for mentor in mentors %}
-<article class="w-100">
-	<div class="bg-white br3 pa3 ma3 ba b--mm-blue">
-		<div class="tc">
-			<h1 id="mentor-name" class="f4 ttc mm-blue">{{ mentor.name }}
+<article class="col-12 col-md-6 col-lg-4 mb-5">
+	<div class="card h-100">
+		<!-- <img class="card-img-top" src="https://placehold.it/300x200" alt=""> -->
+		<div class="card-body">
+			<h4 class="card-title">
+				{{ mentor.name }}
 				{% if mentor.linkedinUrl %}
-				<a class="linkedin" href="{{mentor.linkedinUrl}}"><i class="fa fa-linkedin-square"></i></a>
+					<a href="{{mentor.linkedinUrl}}"><i class="fa fa-linkedin-square"></i></a>
 				{% endif %}
-			</h1>
-			<p class="mm-blue">{{ mentor.currentJob }}</p>
-			<hr class="mw3 bb bw1 b--black-10">
-		</div>
-		<p class="lh-copy f6 black-70">
-			{{ mentor.bio }}
-		</p>
-
-		<div class="flex flex-wrap mentor-email mb3">
-			<div class="w-100 w-20-ns mb1">
-				Email:
-			</div>
-			<div class="w-100 w-80-ns">
-				{{ mentor.email }}
-			</div>
-		</div>
-
-		<div class="flex flex-wrap mentor-specialities mb3">
-			<div class="w-100 w-20-ns mb1">
-				Specialities
-			</div>
-			<div class="w-100 w-80-ns" id="specialities-list">
-				{% for speciality in mentor.specialities %}
-				<span class="f6 dim br-pill mb1 ph2 pv1 white bg-{{ speciality.color }} dib ttc">{{ speciality.value }}</span>
+			</h4>
+			<p class="card-text">{{ mentor.bio }}</p>
+			
+			<div class="row" id="skills-list">
+				<div class="col-12">
+					<b>Skills:</b>
+				</div>
+				{% for skill in mentor.skills %}
+					{% if loop.index0 < 5 %}
+					<span class="col-12">
+						<i class="fa fa-check text-success mr-2"></i>{{ skill.value }}
+					</span>
+					{% endif %}
 				{% endfor %}
 			</div>
-		</div>
-
-		{% if mentor.specialitiesOther %}
-			<div class="flex flex-wrap mentor-specialities mb3">
-				<div class="w-100 w-20-ns mb1">
-					Other specialities
-				</div>
-				<div class="w-100 w-80-ns" id="specialities-other">
-					{{ mentor.specialitiesOther }}
-				</div>
-			</div>
-		{% endif %}
-
-		<div class="flex flex-wrap mentor-preferred-formats mb3">
-			<div class="w-100 w-20-ns mb1">
-				Preferred Formats:
-			</div>
-			<div class="w-100 w-80-ns">
+			<p class="mt-2">
+				<b>Preferred Formats:</b><br />
 				{% for format in mentor.preferredFormats %}
-				<span class="f6 dim br-pill mb1 ph2 pv1 white bg-light-blue dib">{{ format }}</span>
+					<span class="badge badge-pill badge-dark">{{ format }}</span>
 				{% endfor %}
-			</div>
+				{% if 'Yes' == mentor.hasPreviouslyMentored %}
+					<span class="badge badge-pill badge-success">Experienced</span>
+				{% endif %}
+				
+			</p>
 		</div>
-
-		<div class="flex flex-wrap mentor-has-previously-mentored">
-			<div class="w-100 w-20-ns mb1">
-				Has previously mentored?
-			</div>
-			<div class="w-100 w-80-ns">
-				{{ mentor.hasPreviouslyMentored }}
-			</div>
+		<div class="card-footer d-flex justify-content-end">
+			{% if mentor.calendlyUrl %}
+				<a href="{{mentor.calendlyUrl}}" target="_blank" class="btn btn-dark" style="background-color: #14133B; border-color: #14133B"><i class="fa fa-calendar"></i> Schedule</a>
+			{% elif mentor.email %}
+				<a href="mailto:{{mentor.email}}" class="btn btn-outline-dark" style="border-color: #14133B"><i class="fa fa-envelope"></i> Email</a>
+			{% else %}
+				<button disabled class="btn btn-outline btn-outline-danger">Currently Unavilable</button>
+			{% endif %}
 		</div>
 	</div>
 </article>
